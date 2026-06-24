@@ -363,6 +363,8 @@ const supabase = window.supabase.createClient(
 
 async function loadTeam(){
 
+    console.log("Načítám tým...");
+
     const { data, error } = await supabase
     .from('team')
     .select('*');
