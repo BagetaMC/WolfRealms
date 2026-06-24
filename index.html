@@ -350,6 +350,48 @@ function copyIP(){
     setTimeout(()=>t.classList.remove("show"),2000);
 }
 
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+
+const supabase = window.supabase.createClient(
+'https://riqrbhsuclcdslpqfcdy.supabase.co',
+'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJpcXJiaHN1Y2xjZHNscHFmY2R5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIyMzc1MTUsImV4cCI6MjA5NzgxMzUxNX0.tYL2sUr3xbwCsV1m53mXH78VGZvfb4X5DSWjucVuNRQ'
+);
+
+async function loadTeam(){
+
+    const { data, error } = await supabase
+    .from('team')
+    .select('*');
+
+    if(error){
+        console.error(error);
+        return;
+    }
+
+    const container = document.getElementById('teamContainer');
+
+    container.innerHTML = '';
+
+    data.forEach(member => {
+
+        container.innerHTML += `
+        <div class="card">
+            <img src="https://minotar.net/helm/${member.skin}/180">
+            <p>${member.role}</p>
+            <p>${member.nick}</p>
+        </div>
+        `;
+
+    });
+
+}
+
+loadTeam();
+
+</script>
+    
 </script>
 
 </body>
