@@ -396,6 +396,17 @@ console.log("ERROR:", error);
 
 }
 
+async function testAdmin(){
+
+    const { data, error } = await supabase
+    .from('admins')
+    .select('*');
+
+    alert(JSON.stringify(data));
+}
+
+testAdmin();
+
 loadTeam();
 
 </script>
