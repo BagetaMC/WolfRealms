@@ -368,8 +368,8 @@ async function loadTeam(){
     .select('*');
 
     if(error){
-        console.error(error);
-        return;
+    alert(JSON.stringify(error));
+    return;
     }
 
     const container = document.getElementById('teamContainer');
