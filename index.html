@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Wolfino Network</title>
+<title>StarDown</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -250,6 +250,21 @@ p{
     font-size:70px;
 }
 
+
+.black-tabs{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin:25px 0;}
+.tab{padding:10px 18px;background:#222;color:#fff;border:none;border-radius:10px;cursor:pointer;font-family:'Fredoka One',cursive;}
+.tab:hover,.tab.active{background:#7b2cff;}
+#blacklist{overflow-y:auto;padding-top:80px;padding-bottom:40px;}
+.punishment{display:none;}
+.activePunishment{display:block;}
+
+
+.license-btn{position:fixed;left:15px;bottom:15px;background:#222;color:#fff;padding:10px 16px;border-radius:10px;cursor:pointer;z-index:999}
+.modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);justify-content:center;align-items:center;z-index:2000}
+.modal.show{display:flex}
+.modal-box{background:#181818;padding:30px;border-radius:16px;max-width:700px;width:90%;color:#fff}
+.modal-box h2{margin-bottom:15px}
+.closebtn{margin-top:20px;padding:10px 20px;border:none;border-radius:10px;background:#7b2cff;color:#fff;cursor:pointer}
 </style>
 </head>
 
@@ -261,6 +276,7 @@ p{
 <div class="menu" id="menu">
 <a onclick="show('home')">MENU</a>
 <a onclick="show('team')">NÁŠ TÝM</a>
+<a onclick="show('blacklist')">ČERNÁ LISTINA</a>
 <a onclick="show('support')">PODPORA</a>
 </div>
 
@@ -298,10 +314,45 @@ p{
 <div>
 <h1>NÁŠ TÝM</h1>
 
-<div id="teamContainer"></div>
+<div class="card">
+<img src="https://minotar.net/helm/Roxanie17/180">
+<p>Zakladatel projektu</p>
+<p>Roxanie17</p>
+</div>
+
+<div class="card">
+<img src="https://minotar.net/helm/Itzz_kolt/180">
+<p>Vedení projektu</p>
+<p>BagetaMC</p>
+</div>
 
 </div>
 </div>
+
+
+<!-- BLACKLIST -->
+<div class="view hero" id="blacklist">
+<div>
+<h1>ČERNÁ LISTINA</h1>
+<div class="black-tabs">
+<button class="tab active" onclick="showPunishment('perma',this)">PERMABAN</button>
+<button class="tab" onclick="showPunishment('ban',this)">BAN</button>
+<button class="tab" onclick="showPunishment('mute',this)">MUTE</button>
+<button class="tab" onclick="showPunishment('warn',this)">WARN</button>
+</div>
+<div id="perma" class="punishment activePunishment">
+<div class="card">
+<img src="https://minotar.net/helm/Hrac123/180">
+<p><b>Nick:</b> Hrac123</p>
+<p><b>Trest:</b> <span style="color:red">PERMABAN</span></p>
+<p><b>Důvod:</b> Cheaty</p>
+<p><b>Udělil:</b> Roxanie17</p>
+<p><b>Trvá:</b> Navždy</p>
+</div></div>
+<div id="ban" class="punishment"><p>Zatím žádné bany.</p></div>
+<div id="mute" class="punishment"><p>Zatím žádné muty.</p></div>
+<div id="warn" class="punishment"><p>Zatím žádné warningy.</p></div>
+</div></div>
 
 <!-- SUPPORT -->
 <div class="view hero" id="support">
@@ -323,6 +374,18 @@ p{
 </div>
 
 </div>
+
+
+<div class="license-btn" onclick="openLicense()">🛡️ Licence</div>
+<div class="modal" id="licenseModal">
+<div class="modal-box">
+<h2>🛡️ Licence a autorská práva</h2>
+<p>© 2026 StarDown™. Všechna práva vyhrazena.</p><br>
+<p>Tento web, jeho design, logo, texty, grafické prvky a zdrojový kód jsou autorským dílem projektu Wolfino Network™.</p><br>
+<p>Kopírování, úpravy, šíření nebo vydávání tohoto webu či jeho částí bez souhlasu vlastníka není dovoleno.</p><br>
+<p>StarDown™ • All Rights Reserved.</p>
+<button class="closebtn" onclick="closeLicense()">Zavřít</button>
+</div></div>
 
 <div class="toast" id="toast">IP zkopírována</div>
 
@@ -350,65 +413,17 @@ function copyIP(){
     setTimeout(()=>t.classList.remove("show"),2000);
 }
 
-    </script>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
-<script>
-alert("Supabase script běží");
-    
-const supabase = window.supabase.createClient(
-'https://riqrbhsuclcdslpqfcdy.supabase.co',
-'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJpcXJiaHN1Y2xjZHNscHFmY2R5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIyMzc1MTUsImV4cCI6MjA5NzgxMzUxNX0.tYL2sUr3xbwCsV1m53mXH78VGZvfb4X5DSWjucVuNRQ'
-);
-
-async function loadTeam(){
-
-    console.log("Načítám tým...");
-
-    const { data, error } = await supabase
-.from('team')
-.select('*');
-
-    console.log("DATA:", data);
-console.log("ERROR:", error);
-
-    if(error){
-    alert(JSON.stringify(error));
-    return;
-    }
-
-    const container = document.getElementById('teamContainer');
-
-    container.innerHTML = '';
-
-    data.forEach(member => {
-
-        container.innerHTML += `
-        <div class="card">
-            <img src="https://minotar.net/helm/${member.skin}/180">
-            <p>${member.role}</p>
-            <p>${member.nick}</p>
-        </div>
-        `;
-
-    });
-
+function showPunishment(id,btn){
+document.querySelectorAll('.punishment').forEach(x=>x.classList.remove('activePunishment'));
+document.getElementById(id).classList.add('activePunishment');
+document.querySelectorAll('.tab').forEach(x=>x.classList.remove('active'));
+btn.classList.add('active');
 }
 
-async function testAdmin(){
 
-    const { data, error } = await supabase
-    .from('admins')
-    .select('*');
-
-    alert(JSON.stringify(data));
-}
-
-testAdmin();
-
-loadTeam();
-
+function openLicense(){document.getElementById('licenseModal').classList.add('show');}
+function closeLicense(){document.getElementById('licenseModal').classList.remove('show');}
 </script>
 
 </body>
